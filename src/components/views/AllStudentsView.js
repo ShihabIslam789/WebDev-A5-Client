@@ -1,39 +1,143 @@
+import PropTypes from "prop-types";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import AddingStudent from "./AddingStudent";
+import axios from "axios";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  title: {
+    flexGrow: 1,
+    textAlign: "left",
+    fontType: "bold",
+    fontFamily: "Courier, sans-serif",
+    fontSize: "35px",
+    color: "#B1D4E0",
+  },
+  appBar: {
+    backgroundColor: "#11153e",
+    shadows: ["none"],
+  },
+  data: {
+    marginTop: "50px",
+    textAlign: "center",
+    margin: "auto",
+    height: "auto",
+    width: "500px",
+    backgroundColor: "#1C3F60",
+    borderRadius: "50px",
+    padding: "1px",
+  },
+  links: {
+    textDecoration: "none",
+  },
+}));
 
 const AllStudentsView = (props) => {
-  const {students, deleteStudent} = props;
-
-  if (!students.length) {
-    return (
-    <div>
-      <p>There are no students.</p>
-      <Link to={`student/new`}>
-        <button>Add New Student</button>
-      </Link>
-    </div>
-    );
+  const classes = useStyles();
+  if (!props.allStudents.length) {
+    return <div> No Students.</div>;
   }
-  
   return (
     <div>
-      {students.map((student) => {
-        let name = student.firstname + " " + student.lastname;
-        return (
-          <div key={student.id}>
-          <Link to={`/student/${student.id}`}>
-            <h1>{name}</h1>
+      <AppBar position="static" elevation={0} className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" className={classes.title} color="inherit">
+           CRUD app
+          </Typography>
+
+          <Link className={classes.links} to={"/"}>
+            <Button
+              variant="contained"
+              style={{
+                marginRight: "10px",
+                color: "#486aa1",
+                backgroundColor: "#0e5087",
+              }}
+            >
+              Main Menu
+            </Button>
           </Link>
-          <button onClick={() => deleteStudent(student.id)}>Delete</button>
-          </div>
-        );
-      }
-      )}
-      <Link to={`/newstudent`}>
-        <button>Add New Student</button>
-      </Link>
+
+          <Link className={classes.links} to={"/campuses"}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{
+                marginRight: "10px",
+                color: "#486aa1",
+                backgroundColor: "#0e5087",
+              }}
+            >
+              All Campuses
+            </Button>
+          </Link>
+
+          <Link className={classes.links} to={"/students"}>
+            <Button
+              variant="contained"
+              style={{ color: "#486aa1", backgroundColor: "#0e5087" }}
+            >
+              All Students
+            </Button>
+          </Link>
+        </Toolbar>
+      </AppBar>
+
+      <h1
+        style={{
+          textAlign: "center",
+          color: "#0e5087",
+          backgroundColor: "#1C3F60",
+          marginTop: "0px",
+        }}
+      >
+        Click  the names to view more information!
+      </h1>
+
+      <AddingStudent />
+
+      {props.allStudents.map((student) => (
+        <div key={student.id} className={classes.data}>
+          <Link className={classes.links} to={`/student/${student.id}`}>
+            <h1 style={{ color: "#0e5087", display: "inline-block" }}>
+              {student.firstname + " " + student.lastname}
+            </h1>
+          </Link>
+          <button
+            style={{
+              color: "#0e5087",
+              backgroundColor: "#1C3F60",
+              display: "inline-block",
+              fontSize: "30px",
+              float: "right",
+              borderRadius: "180px",
+              border: "1px solid #AFC1D0",
+            }}
+            onClick={function () {
+              axios.delete(`../api/students/${student.id}`).then((res) => {
+                console.log(res);
+              });
+              window.location.reload();
+            }}
+          >
+            X
+          </button>
+        </div>
+      ))}
+      <div style={{ height: "50px" }}></div>
     </div>
   );
 };
 
+AllStudentsView.propTypes = {
+  allStudents: PropTypes.array.isRequired,
+};
 
 export default AllStudentsView;
