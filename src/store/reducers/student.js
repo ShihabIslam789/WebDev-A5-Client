@@ -1,8 +1,6 @@
 import { FETCH_STUDENT } from "../actions/actionTypes";
 
-const initialState = {
-  campus: {},
-};
+
 
 // REDUCER;
 const student = (state=initialState, action) => {
