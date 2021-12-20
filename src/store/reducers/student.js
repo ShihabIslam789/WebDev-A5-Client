@@ -1,7 +1,5 @@
 import { FETCH_STUDENT } from "../actions/actionTypes";
 
-
-
 // REDUCER;
 const student = (state=initialState, action) => {
   switch (action.type) {
