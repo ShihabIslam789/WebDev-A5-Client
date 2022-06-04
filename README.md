@@ -7,4 +7,5 @@ Using Node, Express, React, Redux, PostgreSQL, and Sequelize, build a RESTful fu
 # Author:
  Shihab Islam (github.com/ShihabIslam789)
 
-This is the frontend of the client
+This is the frontend of the client. <br>
+Must be paired and ran with the Server code part <br>
